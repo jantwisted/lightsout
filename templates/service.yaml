@@ -1,0 +1,18 @@
+{{ range .Values.instances }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "lightsout.fullname" $ }}-{{ .name }}
+  labels:
+    app.kubernetes.io/name: {{ include "lightsout.name" $ }}-{{ .name }}
+spec:
+  type: {{ $.Values.service.type }}
+  ports:
+    - port: {{ .port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "lightsout.name" $ }}-{{ .name }}
+---
+{{end}}
